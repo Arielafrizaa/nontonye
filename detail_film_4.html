@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Film: Despicable Me 4 - Nonton Kuy XXI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Detail Film</h1>
+        <p>Informasi Lengkap Film Pilihan Anda</p>
+    </div>
+    <div class="container movie-detail-page">
+        <button onclick="history.back()" class="btn-back">← Kembali ke Daftar Film</button>
+        <div class="detail-film-card">
+            <div class="detail-film-poster">
+                <img src="images/Despicable_Me_4.webp" alt="Despicable Me 4 Poster Besar">
+            </div>
+            <div class="detail-film-content">
+                <h2>Despicable Me 4</h2>
+                <p class="detail-genre">Animasi, Komedi, Keluarga</p>
+                <p class="detail-rating">IMDb: <span class="rating-value">7.5</span></p>
+                <p class="detail-duration">Durasi: 1 jam 35 menit</p>
+                <p class="detail-release">Rilis: 3 Juli 2024</p>
+                <p class="detail-director">Sutradara: Chris Renaud, Patrick Delage</p>
+                <p class="detail-stars">Bintang: Steve Carell, Kristen Wiig, Pierre Coffin</p>
+                <h3>Sinopsis Lengkap:</h3>
+                <p class="long-synopsis">
+                    Gru dan keluarganya menghadapi musuh baru dan tantangan unik, bersama Minion yang selalu kocak. Film ini melanjutkan kisah Gru sebagai agen anti-kejahatan, namun kini ia juga harus menghadapi kehidupan keluarga yang semakin ramai.
+                </p>
+                <h3>Trailer Film:</h3>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/qQlr9-rF32A?si=NsqFRfu2vVjRXjOY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="detail-actions">
+                    <a href="beli_tiket_4.html" class="btn-buy-ticket">Beli Tiket Sekarang</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>© 2025 Nonton Kuy XXI. Semua Hak Dilindungi.</p>
+    </div>
+    <script>
+        document.querySelectorAll('.schedule-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.schedule-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        document.querySelectorAll('.time-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.time-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

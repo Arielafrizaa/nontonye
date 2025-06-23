@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Film: Kingdom of the Planet of the Apes - Nonton Kuy XXI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Detail Film</h1>
+        <p>Informasi Lengkap Film Pilihan Anda</p>
+    </div>
+    <div class="container movie-detail-page">
+        <button onclick="history.back()" class="btn-back">← Kembali ke Daftar Film</button>
+        <div class="detail-film-card">
+            <div class="detail-film-poster">
+                <img src="images/Kingdom_of_the_Planet_of_the_Apes_Poster.jpg" alt="Kingdom of the Planet of the Apes Poster Besar">
+            </div>
+            <div class="detail-film-content">
+                <h2>Kingdom of the Planet of the Apes</h2>
+                <p class="detail-genre">Fiksi Ilmiah, Aksi, Petualangan</p>
+                <p class="detail-rating">IMDb: <span class="rating-value">7.2</span></p>
+                <p class="detail-duration">Durasi: 2 jam 25 menit</p>
+                <p class="detail-release">Rilis: 8 Mei 2024 (Indonesia)</p>
+                <p class="detail-director">Sutradara: Wes Ball</p>
+                <p class="detail-stars">Bintang: Owen Teague, Freya Allan, Kevin Durand</p>
+                <h3>Sinopsis Lengkap:</h3>
+                <p class="long-synopsis">
+                    Beberapa generasi setelah Caesar, kera adalah spesies dominan. Manusia hidup dalam bayang-bayang. Film ini mengisahkan tentang perjalanan seorang kera muda yang mempertanyakan ajaran lama dan berani mencari kebenaran.
+                </p>
+                <h3>Trailer Film:</h3>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/XtFI7SNtVpY?si=NmNiliu5m5PFFiKn" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="detail-actions">
+                    <a href="beli_tiket_6.html" class="btn-buy-ticket">Beli Tiket Sekarang</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>© 2025 Nonton Kuy XXI. Semua Hak Dilindungi.</p>
+    </div>
+    <script>
+        document.querySelectorAll('.schedule-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.schedule-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        document.querySelectorAll('.time-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.time-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Film: Inside Out 2 - Nonton Kuy XXI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Detail Film</h1>
+        <p>Informasi Lengkap Film Pilihan Anda</p>
+    </div>
+    <div class="container movie-detail-page">
+        <button onclick="history.back()" class="btn-back">← Kembali ke Daftar Film</button>
+        <div class="detail-film-card">
+            <div class="detail-film-poster">
+                <img src="images/Inside_Out_2_Poster_Indonesian.webp" alt="Inside Out 2 Poster Besar">
+            </div>
+            <div class="detail-film-content">
+                <h2>Inside Out 2</h2>
+                <p class="detail-genre">Animasi, Komedi, Petualangan</p>
+                <p class="detail-rating">IMDb: <span class="rating-value">8.0</span></p>
+                <p class="detail-duration">Durasi: 1 jam 36 menit</p>
+                <p class="detail-release">Rilis: 14 Juni 2024</p>
+                <p class="detail-director">Sutradara: Kelsey Mann</p>
+                <p class="detail-stars">Bintang: Amy Poehler, Maya Hawke, Lewis Black</p>
+                <h3>Sinopsis Lengkap:</h3>
+                <p class="long-synopsis">
+                    Riley kini telah beranjak remaja dan menghadapi tantangan baru dalam hidupnya. Emosi-emosi lamanya, Joy, Sadness, Anger, Fear, dan Disgust, harus beradaptasi dengan kedatangan emosi-emosi baru yang kompleks, seperti Anxiety, Envy, Ennui, dan Embarrassment. Pergulatan batin Riley semakin rumit seiring dia mencoba menavigasi dunia sosial sekolah menengah, persahabatan, dan harapan masa depan. Film ini menjelajahi bagaimana emosi yang berbeda bekerja sama (atau bertentangan) untuk membentuk kepribadian dan reaksi kita terhadap dunia.
+                </p>
+                <h3>Trailer Film:</h3>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/LEjhY15eCx0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="detail-actions">
+                    <a href="beli_tiket_1.html" class="btn-buy-ticket">Beli Tiket Sekarang</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>© 2025 Nonton Kuy XXI. Semua Hak Dilindungi.</p>
+    </div>
+    <script>
+        document.querySelectorAll('.schedule-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.schedule-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        document.querySelectorAll('.time-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.time-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

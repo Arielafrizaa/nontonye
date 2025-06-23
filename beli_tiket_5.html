@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beli Tiket: Furiosa: A Mad Max Saga - Nonton Kuy XXI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600;700&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="header">
+        <h1>Beli Tiket</h1>
+        <p>Pilih Jadwal dan Jumlah Tiket Anda</p>
+    </div>
+
+    <div class="container ticket-purchase-page">
+        <button onclick="history.back()" class="btn-back">← Kembali</button>
+
+        <div class="purchase-form-card">
+            <h2>Pesan Tiket Film: Furiosa: A Mad Max Saga</h2>
+            <div class="movie-info-summary">
+                <img src="images/Furiosa.jpg" alt="Poster Mini Film">
+                <div>
+                    <p><strong>Furiosa: A Mad Max Saga</strong></p>
+                    <p>Genre: Aksi, Fiksi Ilmiah</p>
+                    <p>Durasi: 2 jam 28 menit</p>
+                </div>
+            </div>
+
+            <form id="ticket-booking-form" action="tiket_saya.html" method="GET">
+                <input type="hidden" name="film_id" value="furiosa_mad_max_saga">
+                <input type="hidden" name="final_price" id="hidden-final-price-input">
+
+                <div class="form-group">
+                    <label for="tanggal_tayang">Pilih Tanggal Tayang:</label>
+                    <input type="date" id="tanggal_tayang" name="tanggal_tayang" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="jam_tayang">Pilih Jam Tayang:</label>
+                    <select id="jam_tayang" name="jam_tayang" required>
+                        <option value="">-- Pilih Jam --</option>
+                        <option value="1300">13:00</option>
+                        <option value="1515">15:15</option>
+                        <option value="1730">17:30</option>
+                        <option value="1945">19:45</option>
+                        <option value="2200">22:00</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="jenis_tiket">Jenis Tiket:</label>
+                    <select id="jenis_tiket" name="jenis_tiket">
+                        <option value="reguler" data-price="40000">Reguler (Rp 40.000)</option>
+                        <option value="premiere" data-price="75000">Premiere (Rp 75.000)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="jumlah_tiket">Jumlah Tiket:</label>
+                    <input type="number" id="jumlah_tiket" name="jumlah_tiket" min="1" value="1" required>
+                </div>
+                
+                <hr class="divider">
+
+                <div class="seat-selection-section">
+                    <h3 class="seat-section-title">Pilih Kursi Anda</h3>
+                    <div class="screen-display">Layar Bioskop</div>
+
+                    <div class="seat-grid" id="seat-grid">
+                        </div>
+
+                    <div class="seat-legend">
+                        <div class="legend-item"><span class="seat-icon available"></span> Tersedia</div>
+                        <div class="legend-item"><span class="seat-icon selected"></span> Dipilih</div>
+                        <div class="legend-item"><span class="seat-icon occupied"></span> Terisi</div>
+                    </div>
+
+                    <div class="seat-summary">
+                        <h3>Kursi Terpilih: <span id="selected-seats-display">Belum ada</span></h3>
+                        <h3>Harga Kursi: <span class="price-value" id="current-seats-price-display">Rp 0</span></h3>
+                    </div>
+
+                    <input type="hidden" name="selected_seats" id="hidden-selected-seats-input">
+                </div>
+                
+                <hr class="divider">
+
+                <div class="payment-selection-section">
+                    <h3 class="payment-section-title">Pilih Metode Pembayaran</h3>
+                    <div class="payment-options">
+                        <label class="payment-method-label">
+                            <input type="radio" name="payment_method" value="bank_transfer" checked>
+                            <span class="custom-radio"></span> Transfer Bank
+                        </label>
+                        <label class="payment-method-label">
+                            <input type="radio" name="payment_method" value="credit_card">
+                            <span class="custom-radio"></span> Kartu Kredit/Debit
+                        </label>
+                        <label class="payment-method-label">
+                            <input type="radio" name="payment_method" value="e_wallet">
+                            <span class="custom-radio"></span> E-Wallet
+                        </label>
+                    </div>
+
+                    <div class="payment-method-details" id="bank_transfer_details">
+                        <h3>Detail Transfer Bank</h3>
+                        <p>Silakan transfer ke nomor rekening simulasi berikut:</p>
+                        <div class="bank-info">
+                            <p><strong>Bank Nonton Kuy XXI</strong></p>
+                            <p>Nomor Rekening: <span class="account-number">1234 5678 9012 3456</span></p>
+                            <p>Atas Nama: PT. Nonton Kuy XXI Tiket</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="bank_name">Nama Bank Anda:</label>
+                            <input type="text" id="bank_name" name="bank_name" placeholder="Contoh: BCA">
+                        </div>
+                        <div class="form-group">
+                            <label for="account_holder">Nama Pemilik Rekening:</label>
+                            <input type="text" id="account_holder" name="account_holder" placeholder="Contoh: Budi Santoso">
+                        </div>
+                    </div>
+
+                    <div class="payment-method-details hidden" id="credit_card_details">
+                        <h3>Detail Kartu Kredit/Debit</h3>
+                        <div class="form-group">
+                            <label for="card_number">Nomor Kartu:</label>
+                            <input type="text" id="card_number" name="card_number" placeholder="XXXX XXXX XXXX XXXX">
+                        </div>
+                        <div class="form-group row-fields">
+                            <div class="field-half">
+                                <label for="expiry_date">Tanggal Kadaluarsa:</label>
+                                <input type="text" id="expiry_date" name="expiry_date" placeholder="MM/YY">
+                            </div>
+                            <div class="field-half">
+                                <label for="cvv">CVV:</label>
+                                <input type="text" id="cvv" name="cvv" placeholder="XXX">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="card_holder_name">Nama Pemilik Kartu:</label>
+                            <input type="text" id="card_holder_name" name="card_holder_name" placeholder="Nama sesuai kartu">
+                        </div>
+                    </div>
+
+                    <div class="payment-method-details hidden" id="e_wallet_details">
+                        <h3>Detail E-Wallet</h3>
+                        <div class="form-group">
+                            <label for="e_wallet_provider">Penyedia E-Wallet:</label>
+                            <select id="e_wallet_provider" name="e_wallet_provider">
+                                <option value="">-- Pilih --</option>
+                                <option value="dana">DANA</option>
+                                <option value="ovo">OVO</option>
+                                <option value="gopay">GoPay</option>
+                                <option value="shopeepay">ShopeePay</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="e_wallet_phone">Nomor Telepon E-Wallet:</label>
+                            <input type="tel" id="e_wallet_phone" name="e_wallet_phone" placeholder="Contoh: 0812XXXXXXXX">
+                        </div>
+                    </div>
+                </div>
+                
+                <hr class="divider">
+
+                <div class="form-group">
+                    <label for="nama_lengkap">Nama Lengkap:</label>
+                    <input type="text" id="nama_lengkap" name="nama_lengkap" required placeholder="Nama sesuai KTP/ID">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required placeholder="Email untuk E-tiket">
+                </div>
+
+                <p id="payment-error-message" class="error-message"></p>
+
+                <div class="total-harga">
+                    <h3>Total Pembayaran: <span id="display_total_harga">Rp 0</span></h3>
+                    <p class="note">*Harga belum termasuk biaya layanan.</p>
+                </div>
+
+                <button type="submit" class="btn-confirm-purchase">Bayar Sekarang</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 Nonton Kuy XXI. Semua Hak Dilindungi.</p>
+    </div>
+
+    <script>
+        const TICKET_PRICES = { 'reguler': 40000, 'premiere': 75000 };
+        const NUM_ROWS = 8; const SEATS_PER_ROW = 10;
+        const OCCUPIED_SEATS = ['A2', 'A3', 'B5', 'C1', 'C2', 'D8', 'E9', 'F4', 'G6', 'H10']; // Contoh kursi terisi
+
+        let selectedSeats = []; let currentTicketPricePerSeat = 0;
+
+        function formatRupiah(angka) { return `Rp ${parseInt(angka).toLocaleString('id-ID')}`; }
+        function generateSeats() { /* Kode fungsi ini sama seperti di beli_tiket_1.html */
+            const seatGrid = document.getElementById('seat-grid');
+            const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+            seatGrid.innerHTML = '';
+            for (let i = 0; i < NUM_ROWS; i++) {
+                const rowDiv = document.createElement('div'); rowDiv.classList.add('row');
+                const rowLabel = document.createElement('span'); rowLabel.classList.add('row-label'); rowLabel.textContent = rows[i]; rowDiv.appendChild(rowLabel);
+                for (let j = 1; j <= SEATS_PER_ROW; j++) {
+                    const seatNumber = rows[i] + j;
+                    const seatDiv = document.createElement('div'); seatDiv.classList.add('seat'); seatDiv.textContent = j; seatDiv.dataset.seatNumber = seatNumber;
+                    if (OCCUPIED_SEATS.includes(seatNumber)) { seatDiv.classList.add('occupied'); } 
+                    else { seatDiv.classList.add('available'); seatDiv.addEventListener('click', () => toggleSeatSelection(seatDiv, seatNumber)); }
+                    rowDiv.appendChild(seatDiv);
+                }
+                seatGrid.appendChild(rowDiv);
+            }
+        }
+        function toggleSeatSelection(seatDiv, seatNumber) { /* Kode fungsi ini sama seperti di beli_tiket_1.html */
+            const maxSelectableSeats = parseInt(document.getElementById('jumlah_tiket').value || 1);
+            if (seatDiv.classList.contains('selected')) {
+                seatDiv.classList.remove('selected'); selectedSeats = selectedSeats.filter(seat => seat !== seatNumber);
+            } else if (selectedSeats.length < maxSelectableSeats) {
+                seatDiv.classList.add('selected'); selectedSeats.push(seatNumber);
+            } else { alert(`Anda hanya dapat memilih ${maxSelectableSeats} kursi sesuai jumlah tiket.`); }
+            updateSeatAndTotalDisplay();
+        }
+        function updateSelectedSeatsDisplay() { /* Kode fungsi ini sama seperti di beli_tiket_1.html */
+            const displayElement = document.getElementById('selected-seats-display');
+            if (selectedSeats.length > 0) { displayElement.textContent = selectedSeats.sort((a, b) => { const rowA = a.substring(0, 1); const numA = parseInt(a.substring(1)); const rowB = b.substring(0, 1); const numB = parseInt(b.substring(1)); if (rowA === rowB) return numA - numB; return rowA.localeCompare(rowB); }).join(', '); } 
+            else { displayElement.textContent = 'Belum ada'; }
+        }
+        function updateSeatAndTotalDisplay() { /* Kode fungsi ini sama seperti di beli_tiket_1.html */
+            const jenisTiketSelect = document.getElementById('jenis_tiket');
+            const selectedTicketType = jenisTiketSelect.value;
+            currentTicketPricePerSeat = TICKET_PRICES[selectedTicketType] || 0;
+            const currentSeatsTotalPrice = selectedSeats.length * currentTicketPricePerSeat;
+            
+            document.getElementById('current-seats-price-display').textContent = formatRupiah(currentSeatsTotalPrice);
+            document.getElementById('display_total_harga').textContent = formatRupiah(currentSeatsTotalPrice);
+
+            updateSelectedSeatsDisplay();
+        }
+
+        function setupPaymentMethodLogic() { /* Kode fungsi ini sama seperti di beli_tiket_1.html */
+            const paymentMethodRadios = document.querySelectorAll('input[name="payment_method"]');
+            const bankTransferDetails = document.getElementById('bank_transfer_details');
+            const creditCardDetails = document.getElementById('credit_card_details');
+            const eWalletDetails = document.getElementById('e_wallet_details');
+            const paymentErrorMessage = document.getElementById('payment-error-message');
+
+            function showPaymentDetails(method) {
+                bankTransferDetails.classList.add('hidden'); creditCardDetails.classList.add('hidden'); eWalletDetails.classList.add('hidden');
+                paymentErrorMessage.style.display = 'none';
+                if (method === 'bank_transfer') { bankTransferDetails.classList.remove('hidden'); } 
+                else if (method === 'credit_card') { creditCardDetails.classList.remove('hidden'); } 
+                else if (method === 'e_wallet') { eWalletDetails.classList.remove('hidden'); }
+            }
+            paymentMethodRadios.forEach(radio => { radio.addEventListener('change', (event) => showPaymentDetails(event.target.value)); });
+            showPaymentDetails('bank_transfer'); // Tampilkan default saat load
+        }
+
+        function validatePaymentDetails() { /* Kode fungsi ini sama seperti di beli_tiket_1.html */
+            const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
+            const paymentErrorMessage = document.getElementById('payment-error-message');
+            paymentErrorMessage.style.display = 'none';
+
+            if (selectedMethod === 'bank_transfer') {
+                const bankName = document.getElementById('bank_name').value;
+                const accountHolder = document.getElementById('account_holder').value;
+                if (!bankName || !accountHolder) { paymentErrorMessage.textContent = 'Mohon lengkapi detail transfer bank Anda.'; paymentErrorMessage.style.display = 'block'; return false; }
+            } else if (selectedMethod === 'credit_card') {
+                const cardNumber = document.getElementById('card_number').value; const expiryDate = document.getElementById('expiry_date').value; const cvv = document.getElementById('cvv').value;
+                if (!cardNumber || !expiryDate || !cvv) { paymentErrorMessage.textContent = 'Mohon lengkapi detail kartu kredit Anda.'; paymentErrorMessage.style.display = 'block'; return false; }
+                if (cardNumber.replace(/\s/g, '').length !== 16 || isNaN(cardNumber.replace(/\s/g, ''))) { paymentErrorMessage.textContent = 'Nomor kartu tidak valid.'; paymentErrorMessage.style.display = 'block'; return false; }
+            } else if (selectedMethod === 'e_wallet') {
+                const eWalletProvider = document.getElementById('e_wallet_provider').value; const eWalletPhone = document.getElementById('e_wallet_phone').value;
+                if (!eWalletProvider || !eWalletPhone) { paymentErrorMessage.textContent = 'Mohon lengkapi detail E-Wallet Anda.'; paymentErrorMessage.style.display = 'block'; return false; }
+            }
+            return true;
+        }
+
+
+        document.addEventListener('DOMContentLoaded', () => { /* Kode ini sama seperti di beli_tiket_1.html */
+            const tanggalTayangInput = document.getElementById('tanggal_tayang');
+            const jumlahTiketInput = document.getElementById('jumlah_tiket');
+            const jenisTiketSelect = document.getElementById('jenis_tiket');
+            const bookingForm = document.getElementById('ticket-booking-form');
+            const hiddenSelectedSeatsInput = document.getElementById('hidden-selected-seats-input');
+            const hiddenFinalPriceInput = document.getElementById('hidden-final-price-input');
+
+            const today = new Date(); let dd = String(today.getDate()).padStart(2, '0'); let mm = String(today.getMonth() + 1).padStart(2, '0'); let يَ = today.getFullYear();
+            const minDate = يَ + '-' + mm + '-' + dd; tanggalTayangInput.setAttribute('min', minDate);
+
+            jumlahTiketInput.addEventListener('input', updateSeatAndTotalDisplay);
+            jenisTiketSelect.addEventListener('change', updateSeatAndTotalDisplay);
+
+            generateSeats();
+            setupPaymentMethodLogic(); 
+            updateSeatAndTotalDisplay(); 
+
+            bookingForm.addEventListener('submit', (event) => {
+                const maxSelectableSeats = parseInt(jumlahTiketInput.value || 1);
+                
+                if (selectedSeats.length === 0) { alert('Mohon pilih setidaknya satu kursi.'); event.preventDefault(); return; }
+                if (selectedSeats.length !== maxSelectableSeats) { alert(`Anda harus memilih tepat ${maxSelectableSeats} kursi sesuai jumlah tiket.`); event.preventDefault(); return; }
+
+                if (!validatePaymentDetails()) { event.preventDefault(); return; }
+
+                hiddenSelectedSeatsInput.value = selectedSeats.sort().join(',');
+                hiddenFinalPriceInput.value = selectedSeats.length * currentTicketPricePerSeat;
+            });
+        });
+    </script>
+</body>
+</html>

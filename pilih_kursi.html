@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pilih Kursi Anda - Nonton Kuy XXI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600;700&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="header">
+        <h1>Pilih Kursi Anda</h1>
+        <p>Jaminan Kenyamanan Nonton Terbaik!</p>
+    </div>
+
+    <div class="container seat-selection-page">
+        <button onclick="history.back()" class="btn-back">← Kembali ke Pembelian Tiket</button>
+
+        <div class="seat-selection-card">
+            <h2 id="movie-title-seat-page">Loading Film...</h2>
+            <div class="movie-info-summary-seat-page">
+                <img id="movie-poster-seat-page" src="https://via.placeholder.com/100x150?text=Poster" alt="Poster Film">
+                <div>
+                    <p id="movie-genre-seat-page"></p>
+                    <p id="movie-duration-seat-page"></p>
+                    <p id="selected-date-time-display"></p>
+                    <p>Jenis Tiket: <span id="selected-ticket-type-display"></span></p>
+                    <p>Jumlah Tiket Anda: <span id="selected-ticket-quantity-display"></span></p>
+                </div>
+            </div>
+
+            <div class="screen-display">Layar Bioskop</div>
+
+            <div class="seat-grid" id="seat-grid">
+                </div>
+
+            <div class="seat-legend">
+                <div class="legend-item"><span class="seat-icon available"></span> Tersedia</div>
+                <div class="legend-item"><span class="seat-icon selected"></span> Dipilih</div>
+                <div class="legend-item"><span class="seat-icon occupied"></span> Terisi</div>
+            </div>
+
+            <div class="seat-summary">
+                <h3>Kursi Terpilih: <span id="selected-seats-display">Belum ada</span></h3>
+                <h3>Total Harga Kursi: <span class="price-value" id="total-seats-price-display">Rp 0</span></h3>
+            </div>
+
+            <button id="proceed-to-payment-btn" class="btn-confirm-purchase">Lanjutkan Pembayaran</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 Nonton Kuy XXI. Semua Hak Dilindungi.</p>
+    </div>
+
+    <script>
+        // --- DATABASE FILM (Sama seperti di tiket_saya.html dan perlu disinkronkan) ---
+        const MOVIE_DATA = {
+            'inside_out_2': {
+                title: 'Inside Out 2', genre: 'Animasi, Komedi, Petualangan', duration: '1 jam 36 menit', imdb: '8.0',
+                poster_mini: 'images/'
+            },
+            'deadpool_wolverine': {
+                title: 'Deadpool & Wolverine', genre: 'Aksi, Komedi, Fiksi Ilmiah', duration: 'Perkiraan', imdb: '8.5',
+                poster_mini: 'images/Deadpool_Wolverine_p.jpg'
+            },
+            'a_quiet_place_day_one': {
+                title: 'A Quiet Place: Day One', genre: 'Horor, Thriller, Fiksi Ilmiah', duration: 'Perkiraan', imdb: '7.8',
+                poster_mini: 'images/A_Quiet_Place.webp'
+            },
+            'despicable_me_4': {
+                title: 'Despicable Me 4', genre: 'Animasi, Komedi, Keluarga', duration: 'Perkiraan', imdb: '7.5',
+                poster_mini: 'images/Despicable_Me_4.webp'
+            },
+            'furiosa_mad_max_saga': {
+                title: 'Furiosa: A Mad Max Saga', genre: 'Aksi, Fiksi Ilmiah, Petualangan', duration: '2 jam 28 menit', imdb: '7.9',
+                poster_mini: 'images/Furiosa.jpg'
+            },
+            'kingdom_of_the_planet_of_the_apes': {
+                title: 'Kingdom of the Planet of the Apes', genre: 'Fiksi Ilmiah, Aksi, Petualangan', duration: '2 jam 25 menit', imdb: '7.2',
+                poster_mini: 'images/Kingdom_of_the_Planet_of_the_Apes_Poster.jpg'
+            },
+            'if_movie': {
+                title: 'IF', genre: 'Komedi, Drama, Fantasi', duration: '1 jam 44 menit', imdb: '6.5',
+                poster_mini: 'images/IF.webp'
+            }
+        };
+
+        // Data Harga Tiket (Sama seperti di beli_tiket_X.html dan tiket_saya.html)
+        const TICKET_PRICES = {
+            'reguler': 40000,
+            'premiere': 75000
+        };
+
+        // Konfigurasi Kursi
+        const NUM_ROWS = 8;
+        const SEATS_PER_ROW = 10;
+        // Contoh kursi yang sudah terisi. Di proyek nyata, ini datang dari database.
+        const OCCUPIED_SEATS = ['A2', 'A3', 'B5', 'C1', 'C2', 'D8', 'E9', 'F4', 'G6', 'H10']; 
+
+        let selectedSeats = []; // Array untuk menyimpan kursi yang dipilih (misal: ['A1', 'A2'])
+        let baseTicketPrice = 0; // Harga per tiket berdasarkan jenis yang dipilih
+
+        // Menyimpan semua parameter dari URL beli_tiket_X.html
+        let previousFormParams = {}; 
+
+        // --- Utility Functions ---
+        function getQueryParams() {
+            const params = {};
+            const urlParams = new URLSearchParams(window.location.search);
+            for (const [key, value] of urlParams) {
+                params[key] = value;
+            }
+            return params;
+        }
+
+        function formatTanggal(tanggalStr) {
+            if (!tanggalStr) return 'Tidak tersedia';
+            const [tahun, bulan, hari] = tanggalStr.split('-');
+            const date = new Date(tahun, bulan - 1, hari);
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('id-ID', options);
+        }
+
+        function formatJam(jamStr) {
+            if (!jamStr) return 'Tidak tersedia';
+            const jam = jamStr.substring(0, 2);
+            const menit = jamStr.substring(2, 4);
+            return `${jam}:${menit}`;
+        }
+
+        function calculateTotalPrice() {
+            const total = selectedSeats.length * baseTicketPrice;
+            document.getElementById('total-seats-price-display').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+        }
+
+        // --- Seat Generation & Interaction ---
+        function generateSeats() {
+            const seatGrid = document.getElementById('seat-grid');
+            const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+
+            for (let i = 0; i < NUM_ROWS; i++) {
+                const rowDiv = document.createElement('div');
+                rowDiv.classList.add('row');
+
+                const rowLabel = document.createElement('span');
+                rowLabel.classList.add('row-label');
+                rowLabel.textContent = rows[i];
+                rowDiv.appendChild(rowLabel);
+
+                for (let j = 1; j <= SEATS_PER_ROW; j++) {
+                    const seatNumber = rows[i] + j;
+                    const seatDiv = document.createElement('div');
+                    seatDiv.classList.add('seat');
+                    seatDiv.textContent = j;
+                    seatDiv.dataset.seatNumber = seatNumber; // Simpan nomor kursi di data attribute
+
+                    if (OCCUPIED_SEATS.includes(seatNumber)) {
+                        seatDiv.classList.add('occupied');
+                    } else {
+                        seatDiv.classList.add('available');
+                        seatDiv.addEventListener('click', () => toggleSeatSelection(seatDiv, seatNumber));
+                    }
+                    rowDiv.appendChild(seatDiv);
+                }
+                seatGrid.appendChild(rowDiv);
+            }
+        }
+
+        function toggleSeatSelection(seatDiv, seatNumber) {
+            // Batasan: Hanya bisa memilih sebanyak jumlah tiket yang dibeli di halaman sebelumnya
+            const maxSelectableSeats = parseInt(previousFormParams.jumlah_tiket || 1);
+
+            if (seatDiv.classList.contains('selected')) {
+                // Deselect seat
+                seatDiv.classList.remove('selected');
+                selectedSeats = selectedSeats.filter(seat => seat !== seatNumber);
+            } else if (selectedSeats.length < maxSelectableSeats) {
+                // Select seat, if within limit
+                seatDiv.classList.add('selected');
+                selectedSeats.push(seatNumber);
+            } else {
+                // Limit reached
+                alert(`Anda hanya dapat memilih ${maxSelectableSeats} kursi sesuai jumlah tiket.`);
+            }
+            updateSelectedSeatsDisplay();
+            calculateTotalPrice();
+        }
+
+        function updateSelectedSeatsDisplay() {
+            const displayElement = document.getElementById('selected-seats-display');
+            if (selectedSeats.length > 0) {
+                displayElement.textContent = selectedSeats.sort((a, b) => {
+                    // Custom sort for seats (e.g., A1, A10, B1, B2)
+                    const rowA = a.substring(0, 1);
+                    const numA = parseInt(a.substring(1));
+                    const rowB = b.substring(0, 1);
+                    const numB = parseInt(b.substring(1));
+
+                    if (rowA === rowB) return numA - numB;
+                    return rowA.localeCompare(rowB);
+                }).join(', '); // Urutkan kursi sebelum ditampilkan
+            } else {
+                displayElement.textContent = 'Belum ada';
+            }
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            previousFormParams = getQueryParams(); // Ambil semua data dari URL sebelumnya
+
+            // Isi informasi film di bagian atas halaman kursi
+            const filmId = previousFormParams.film_id;
+            const movieInfo = MOVIE_DATA[filmId];
+
+            if (movieInfo) {
+                document.getElementById('movie-title-seat-page').textContent = movieInfo.title;
+                document.getElementById('movie-poster-seat-page').src = movieInfo.poster_mini;
+                document.getElementById('movie-genre-seat-page').textContent = `Genre: ${movieInfo.genre}`;
+                document.getElementById('movie-duration-seat-page').textContent = `Durasi: ${movieInfo.duration}`;
+            } else {
+                document.getElementById('movie-title-seat-page').textContent = 'Film Tidak Ditemukan';
+                document.getElementById('movie-poster-seat-page').src = 'https://via.placeholder.com/100x150?text=N/A';
+                document.getElementById('movie-genre-seat-page').textContent = `Genre: N/A`;
+                document.getElementById('movie-duration-seat-page').textContent = `Durasi: N/A`;
+            }
+
+            // Isi detail pemesanan dasar dari halaman sebelumnya
+            document.getElementById('selected-date-time-display').textContent = `Tanggal: ${formatTanggal(previousFormParams.tanggal_tayang)} / Jam: ${formatJam(previousFormParams.jam_tayang)}`;
+            document.getElementById('selected-ticket-type-display').textContent = (previousFormParams.jenis_tiket || '').charAt(0).toUpperCase() + (previousFormParams.jenis_tiket || '').slice(1);
+            document.getElementById('selected-ticket-quantity-display').textContent = previousFormParams.jumlah_tiket;
+            
+            // Set harga dasar tiket dari jenis tiket yang dipilih di halaman sebelumnya
+            baseTicketPrice = TICKET_PRICES[previousFormParams.jenis_tiket] || 0;
+            calculateTotalPrice(); // Hitung ulang total awal (Rp 0 jika belum ada kursi terpilih)
+
+
+            generateSeats(); // Buat grid kursi
+
+            // --- Lanjutkan ke Halaman Konfirmasi Pembayaran ---
+            const proceedBtn = document.getElementById('proceed-to-payment-btn');
+            proceedBtn.addEventListener('click', () => {
+                const maxSelectableSeats = parseInt(previousFormParams.jumlah_tiket || 1);
+
+                if (selectedSeats.length === 0) {
+                    alert('Mohon pilih setidaknya satu kursi.');
+                    return;
+                }
+                if (selectedSeats.length !== maxSelectableSeats) {
+                    alert(`Anda harus memilih tepat ${maxSelectableSeats} kursi.`);
+                    return;
+                }
+
+                // Bangun URL untuk tiket_saya.html dengan semua data yang diperlukan
+                const finalQueryParams = new URLSearchParams();
+                
+                // Tambahkan semua parameter dari halaman beli_tiket.html
+                for (const key in previousFormParams) {
+                    if (previousFormParams.hasOwnProperty(key)) {
+                        finalQueryParams.append(key, previousFormParams[key]);
+                    }
+                }
+                
+                // Tambahkan data kursi terpilih dan harga final dari halaman ini
+                finalQueryParams.append('selected_seats', selectedSeats.sort().join(',')); // Kursi terpilih
+                finalQueryParams.append('final_price', selectedSeats.length * baseTicketPrice); // Harga final yang dihitung di sini
+
+                // Navigasi ke tiket_saya.html
+                window.location.href = `tiket_saya.html?${finalQueryParams.toString()}`;
+            });
+        });
+    </script>
+</body>
+</html>

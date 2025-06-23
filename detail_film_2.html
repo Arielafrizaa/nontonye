@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Film: Deadpool & Wolverine - Nonton Kuy XXI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Detail Film</h1>
+        <p>Informasi Lengkap Film Pilihan Anda</p>
+    </div>
+    <div class="container movie-detail-page">
+        <button onclick="history.back()" class="btn-back">← Kembali ke Daftar Film</button>
+        <div class="detail-film-card">
+            <div class="detail-film-poster">
+                <img src="images/Deadpool_Wolverine_p.jpg" alt="Deadpool & Wolverine Poster Besar">
+            </div>
+            <div class="detail-film-content">
+                <h2>Deadpool & Wolverine</h2>
+                <p class="detail-genre">Aksi, Komedi, Fiksi Ilmiah</p>
+                <p class="detail-rating">IMDb: <span class="rating-value">8.5</span></p>
+                <p class="detail-duration">Durasi: 2 jam 8 menit</p>
+                <p class="detail-release">Rilis: 26 Juli 2024</p>
+                <p class="detail-director">Sutradara: Shawn Levy</p>
+                <p class="detail-stars">Bintang: Ryan Reynolds, Hugh Jackman, Emma Corrin</p>
+                <h3>Sinopsis Lengkap:</h3>
+                <p class="long-synopsis">
+                    Deadpool bergabung dengan Wolverine dalam petualangan multiverse yang gila untuk menyelamatkan realitas. Film ini membawa kembali duo ikonik Marvel dengan humor khas Deadpool dan aksi brutal Wolverine.
+                </p>
+                <h3>Trailer Film:</h3>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/73_1biulkYk?si=oMXx7ehWVA7WcqnB" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="detail-actions">
+                    <a href="beli_tiket_2.html" class="btn-buy-ticket">Beli Tiket Sekarang</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>© 2025 Nonton Kuy XXI. Semua Hak Dilindungi.</p>
+    </div>
+    <script>
+        document.querySelectorAll('.schedule-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.schedule-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        document.querySelectorAll('.time-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.time-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

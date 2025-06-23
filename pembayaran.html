@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembayaran Tiket - CinePro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600;700&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="header">
+        <h1>Pembayaran</h1>
+        <p>Selesaikan Pemesanan Tiket Anda</p>
+    </div>
+
+    <div class="container payment-page">
+        <button onclick="history.back()" class="btn-back">← Kembali ke Pemilihan Kursi</button>
+
+        <div class="payment-card">
+            <h2>Ringkasan Pesanan Anda</h2>
+            <div class="order-summary">
+                <div class="movie-info-summary-payment">
+                    <img id="payment-movie-poster" src="https://via.placeholder.com/100x150?text=Poster" alt="Poster Film">
+                    <div>
+                        <h3 id="payment-movie-title"></h3>
+                        <p id="payment-movie-details"></p>
+                        <p id="payment-date-time"></p>
+                        <p id="payment-selected-seats"></p>
+                    </div>
+                </div>
+                <div class="summary-total">
+                    <h3>Total Pembayaran: <span class="price-value" id="payment-total-amount">Rp 0</span></h3>
+                </div>
+            </div>
+
+            <hr class="divider">
+
+            <h2>Pilih Metode Pembayaran</h2>
+            <div class="payment-options">
+                <label class="payment-method-label">
+                    <input type="radio" name="payment_method" value="bank_transfer" checked>
+                    <span class="custom-radio"></span> Transfer Bank
+                </label>
+                <label class="payment-method-label">
+                    <input type="radio" name="payment_method" value="credit_card">
+                    <span class="custom-radio"></span> Kartu Kredit/Debit
+                </label>
+                <label class="payment-method-label">
+                    <input type="radio" name="payment_method" value="e_wallet">
+                    <span class="custom-radio"></span> E-Wallet
+                </label>
+            </div>
+
+            <div class="payment-method-details" id="bank_transfer_details">
+                <h3>Detail Transfer Bank</h3>
+                <p>Silakan transfer ke nomor rekening simulasi berikut:</p>
+                <div class="bank-info">
+                    <p><strong>Bank CinePro (Simulasi)</strong></p>
+                    <p>Nomor Rekening: <span class="account-number">1234 5678 9012 3456</span></p>
+                    <p>Atas Nama: PT. CinePro Tiket</p>
+                </div>
+                <p class="small-text">Pesanan akan otomatis terkonfirmasi setelah Anda menekan "Bayar Sekarang".</p>
+                <div class="form-group">
+                    <label for="bank_name">Nama Bank Anda:</label>
+                    <input type="text" id="bank_name" placeholder="Contoh: BCA">
+                </div>
+                <div class="form-group">
+                    <label for="account_holder">Nama Pemilik Rekening:</label>
+                    <input type="text" id="account_holder" placeholder="Contoh: Budi Santoso">
+                </div>
+            </div>
+
+            <div class="payment-method-details hidden" id="credit_card_details">
+                <h3>Detail Kartu Kredit/Debit</h3>
+                <div class="form-group">
+                    <label for="card_number">Nomor Kartu:</label>
+                    <input type="text" id="card_number" placeholder="XXXX XXXX XXXX XXXX">
+                </div>
+                <div class="form-group row-fields">
+                    <div class="field-half">
+                        <label for="expiry_date">Tanggal Kadaluarsa:</label>
+                        <input type="text" id="expiry_date" placeholder="MM/YY">
+                    </div>
+                    <div class="field-half">
+                        <label for="cvv">CVV:</label>
+                        <input type="text" id="cvv" placeholder="XXX">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="card_holder_name">Nama Pemilik Kartu:</label>
+                    <input type="text" id="card_holder_name" placeholder="Nama sesuai kartu">
+                </div>
+            </div>
+
+            <div class="payment-method-details hidden" id="e_wallet_details">
+                <h3>Detail E-Wallet</h3>
+                <div class="form-group">
+                    <label for="e_wallet_provider">Penyedia E-Wallet:</label>
+                    <select id="e_wallet_provider">
+                        <option value="">-- Pilih --</option>
+                        <option value="dana">DANA</option>
+                        <option value="ovo">OVO</option>
+                        <option value="gopay">GoPay</option>
+                        <option value="shopeepay">ShopeePay</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="e_wallet_phone">Nomor Telepon E-Wallet:</label>
+                    <input type="tel" id="e_wallet_phone" placeholder="Contoh: 0812XXXXXXXX">
+                </div>
+            </div>
+
+            <p id="payment-error-message" class="error-message"></p>
+
+            <button id="pay-now-btn" class="btn-confirm-purchase">Bayar Sekarang</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 CinePro. Semua Hak Dilindungi.</p>
+    </div>
+
+    <script>
+        // --- DATABASE FILM (Sama seperti di tiket_saya.html dan beli_tiket_X.html) ---
+        const MOVIE_DATA = {
+            'inside_out_2': { title: 'Inside Out 2', genre: 'Animasi, Komedi, Petualangan', duration: '1 jam 36 menit', imdb: '8.0', poster_mini: 'https://image.tmdb.org/t/p/w200/vpnEPMi5Hq4P2b23n8tE7T7wG7V.jpg' },
+            'deadpool_wolverine': { title: 'Deadpool & Wolverine', genre: 'Aksi, Komedi, Fiksi Ilmiah', duration: 'Perkiraan', imdb: '8.5', poster_mini: 'https://image.tmdb.org/t/p/w200/A088Y2y6I8s2V4F1470hR0l1f1x.jpg' },
+            'a_quiet_place_day_one': { title: 'A Quiet Place: Day One', genre: 'Horor, Thriller, Fiksi Ilmiah', duration: 'Perkiraan', imdb: '7.8', poster_mini: 'https://image.tmdb.org/t/p/w200/ycoWp7Xh3iXwL3bY2xY7Wk6Hl3b.jpg' },
+            'despicable_me_4': { title: 'Despicable Me 4', genre: 'Animasi, Komedi, Keluarga', duration: 'Perkiraan', imdb: '7.5', poster_mini: 'https://image.tmdb.org/t/p/w200/fK2g8zT2R7p097GgR3x8S6s1h0u.jpg' },
+            'furiosa_mad_max_saga': { title: 'Furiosa: A Mad Max Saga', genre: 'Aksi, Fiksi Ilmiah, Petualangan', duration: '2 jam 28 menit', imdb: '7.9', poster_mini: 'https://image.tmdb.org/t/p/w200/iADOJ7yYp5bO15pW3uEw70W7MhP.jpg' },
+            'kingdom_of_the_planet_of_the_apes': { title: 'Kingdom of the Planet of the Apes', genre: 'Fiksi Ilmiah, Aksi, Petualangan', duration: '2 jam 25 menit', imdb: '7.2', poster_mini: 'https://image.tmdb.org/t/p/w200/gWdKjge3e7C9gGytR6K1oR3y1nJ.jpg' },
+            'if_movie': { title: 'IF', genre: 'Komedi, Drama, Fantasi', duration: '1 jam 44 menit', imdb: '6.5', poster_mini: 'https://image.tmdb.org/t/p/w200/yK9JtS6tE4Gf25oP2cK0R7kQ2q.jpg' }
+        };
+
+        // --- Utility Functions (Sama seperti di tiket_saya.html) ---
+        function getQueryParams() {
+            const params = {};
+            const urlParams = new URLSearchParams(window.location.search);
+            for (const [key, value] of urlParams) {
+                params[key] = value;
+            }
+            return params;
+        }
+
+        function formatTanggal(tanggalStr) { /* ... sama ... */
+            if (!tanggalStr) return 'Tidak tersedia';
+            const [tahun, bulan, hari] = tanggalStr.split('-');
+            const date = new Date(tahun, bulan - 1, hari);
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('id-ID', options);
+        }
+
+        function formatJam(jamStr) { /* ... sama ... */
+            if (!jamStr) return 'Tidak tersedia';
+            const jam = jamStr.substring(0, 2);
+            const menit = jamStr.substring(2, 4);
+            return `${jam}:${menit}`;
+        }
+
+        function formatRupiah(amount) {
+            return `Rp ${parseFloat(amount).toLocaleString('id-ID')}`;
+        }
+
+
+        // --- Initialization & Event Listeners ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const queryParams = getQueryParams();
+            let allOrderDetails = queryParams; // Menyimpan semua query params dari halaman sebelumnya
+
+            // Dapatkan referensi elemen ringkasan pesanan
+            const paymentMoviePoster = document.getElementById('payment-movie-poster');
+            const paymentMovieTitle = document.getElementById('payment-movie-title');
+            const paymentMovieDetails = document.getElementById('payment-movie-details');
+            const paymentDateTime = document.getElementById('payment-date-time');
+            const paymentSelectedSeats = document.getElementById('payment-selected-seats');
+            const paymentTotalAmount = document.getElementById('payment-total-amount');
+            const paymentErrorMessage = document.getElementById('payment-error-message');
+
+            // Dapatkan info film dari MOVIE_DATA
+            const filmId = allOrderDetails.film_id;
+            const movieInfo = MOVIE_DATA[filmId];
+
+            if (movieInfo) {
+                paymentMoviePoster.src = movieInfo.poster_mini;
+                paymentMoviePoster.alt = `Poster ${movieInfo.title}`;
+                paymentMovieTitle.textContent = movieInfo.title;
+                paymentMovieDetails.textContent = `Genre: ${movieInfo.genre} | Durasi: ${movieInfo.duration}`;
+                paymentDateTime.textContent = `Tanggal: ${formatTanggal(allOrderDetails.tanggal_tayang)} / Jam: ${formatJam(allOrderDetails.jam_tayang)}`;
+                paymentSelectedSeats.textContent = `Kursi: ${allOrderDetails.selected_seats}`;
+                paymentTotalAmount.textContent = formatRupiah(allOrderDetails.final_price);
+            } else {
+                paymentMovieTitle.textContent = 'Film Tidak Ditemukan';
+                paymentMovieDetails.textContent = 'Detail tidak tersedia.';
+                paymentDateTime.textContent = 'Tanggal/Jam tidak tersedia.';
+                paymentSelectedSeats.textContent = 'Kursi tidak tersedia.';
+                paymentTotalAmount.textContent = 'Rp 0';
+                paymentMoviePoster.src = 'https://via.placeholder.com/100x150?text=N/A';
+            }
+
+            // --- Logika Pemilihan Metode Pembayaran ---
+            const paymentMethodRadios = document.querySelectorAll('input[name="payment_method"]');
+            const bankTransferDetails = document.getElementById('bank_transfer_details');
+            const creditCardDetails = document.getElementById('credit_card_details');
+            const eWalletDetails = document.getElementById('e_wallet_details');
+
+            function showPaymentDetails(method) {
+                bankTransferDetails.classList.add('hidden');
+                creditCardDetails.classList.add('hidden');
+                eWalletDetails.classList.add('hidden');
+
+                if (method === 'bank_transfer') {
+                    bankTransferDetails.classList.remove('hidden');
+                } else if (method === 'credit_card') {
+                    creditCardDetails.classList.remove('hidden');
+                } else if (method === 'e_wallet') {
+                    eWalletDetails.classList.remove('hidden');
+                }
+            }
+
+            // Event listener untuk radio button
+            paymentMethodRadios.forEach(radio => {
+                radio.addEventListener('change', (event) => {
+                    showPaymentDetails(event.target.value);
+                });
+            });
+
+            // Tampilkan detail metode pembayaran default (transfer bank) saat halaman dimuat
+            showPaymentDetails('bank_transfer');
+
+
+            // --- Logika Tombol Bayar Sekarang ---
+            const payNowBtn = document.getElementById('pay-now-btn');
+            payNowBtn.addEventListener('click', () => {
+                // Ini adalah simulasi pembayaran. Di dunia nyata akan ada validasi dan proses server.
+                const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
+                
+                // --- Validasi Sederhana (Contoh: untuk kartu kredit/debit) ---
+                if (selectedMethod === 'credit_card') {
+                    const cardNumber = document.getElementById('card_number').value;
+                    const expiryDate = document.getElementById('expiry_date').value;
+                    const cvv = document.getElementById('cvv').value;
+
+                    if (!cardNumber || !expiryDate || !cvv) {
+                        paymentErrorMessage.textContent = 'Mohon lengkapi detail kartu kredit Anda.';
+                        paymentErrorMessage.style.display = 'block';
+                        return;
+                    }
+                    if (cardNumber.replace(/\s/g, '').length !== 16 || isNaN(cardNumber.replace(/\s/g, ''))) {
+                        paymentErrorMessage.textContent = 'Nomor kartu tidak valid.';
+                        paymentErrorMessage.style.display = 'block';
+                        return;
+                    }
+                    paymentErrorMessage.style.display = 'none'; // Sembunyikan error jika validasi sukses
+                } else if (selectedMethod === 'bank_transfer') {
+                    const bankName = document.getElementById('bank_name').value;
+                    const accountHolder = document.getElementById('account_holder').value;
+                     if (!bankName || !accountHolder) {
+                        paymentErrorMessage.textContent = 'Mohon lengkapi detail transfer bank Anda.';
+                        paymentErrorMessage.style.display = 'block';
+                        return;
+                    }
+                     paymentErrorMessage.style.display = 'none';
+                } else if (selectedMethod === 'e_wallet') {
+                    const eWalletProvider = document.getElementById('e_wallet_provider').value;
+                    const eWalletPhone = document.getElementById('e_wallet_phone').value;
+                     if (!eWalletProvider || !eWalletPhone) {
+                        paymentErrorMessage.textContent = 'Mohon lengkapi detail E-Wallet Anda.';
+                        paymentErrorMessage.style.display = 'block';
+                        return;
+                    }
+                     paymentErrorMessage.style.display = 'none';
+                }
+
+
+                // Jika validasi sisi klien (simulasi) berhasil, lanjutkan ke halaman tiket
+                // Bangun URL untuk tiket_saya.html dengan semua data yang diperlukan
+                const finalTicketParams = new URLSearchParams();
+                for (const key in allOrderDetails) {
+                    if (allOrderDetails.hasOwnProperty(key)) {
+                        finalTicketParams.append(key, allOrderDetails[key]);
+                    }
+                }
+                
+                // Tambahkan metode pembayaran yang dipilih ke URL (opsional, untuk tampilan di tiket_saya.html)
+                finalTicketParams.append('payment_method_chosen', selectedMethod);
+
+                window.location.href = `tiket_saya.html?${finalTicketParams.toString()}`;
+            });
+        });
+    </script>
+</body>
+</html>

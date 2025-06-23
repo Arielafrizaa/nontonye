@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiket Anda - Nonton Kuy XXI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600;700&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="header">
+        <h1>Tiket Anda Siap!</h1>
+        <p>Terima Kasih Telah Memesan di Nonton Kuy XXI</p>
+    </div>
+
+    <div class="container ticket-confirmation-page">
+        <div class="ticket-card">
+            <div class="ticket-header">
+                <h2>Tiket Nonton Nonton Kuy XXI</h2>
+                <span class="ticket-status">Pembayaran Berhasil!</span>
+            </div>
+            <div class="ticket-details">
+                <div class="movie-info">
+                    <img id="ticket-movie-poster" src="" alt="Poster Film">
+                    <div>
+                        <h3 id="ticket-movie-title"></h3>
+                        <p id="ticket-movie-genre"></p>
+                        <p id="ticket-movie-duration"></p>
+                        <p id="ticket-movie-imdb"></p>
+                    </div>
+                </div>
+                
+                <div class="divider-dashed"></div>
+
+                <div class="detail-row">
+                    <span class="label">Tanggal Tayang:</span>
+                    <span class="value" id="ticket-tanggal-tayang"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Jam Tayang:</span>
+                    <span class="value" id="ticket-jam-tayang"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Jumlah Tiket:</span>
+                    <span class="value" id="ticket-jumlah-tiket"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Kursi Terpilih:</span>
+                    <span class="value" id="ticket-selected-seats"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Total Pembayaran:</span>
+                    <span class="value price-value" id="ticket-total-bayaran"></span>
+                </div>
+
+                <div class="divider-dashed"></div>
+
+                <div class="user-info">
+                    <div class="detail-row">
+                        <span class="label">Nama Pemesan:</span>
+                        <span class="value" id="ticket-nama-pemesan"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Email:</span>
+                        <span class="value" id="ticket-email-pemesan"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Metode Pembayaran:</span>
+                        <span class="value" id="ticket-payment-method"></span>
+                    </div>
+                    </div>
+
+                <div class="qr-code">
+                    <img id="qr-code-image" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=CinePro%20Ticket%20Confirmation" alt="QR Code Konfirmasi Tiket">
+                    <p>Tunjukkan QR Code ini di pintu masuk bioskop.</p>
+                </div>
+            </div>
+            <div class="ticket-footer">
+                <p>Terima kasih telah memesan tiket Anda!</p>
+            </div>
+        </div>
+
+        <div class="action-buttons-ticket">
+            <a href="index.html" class="btn-primary-ticket">Kembali ke Beranda</a>
+            <button onclick="window.print()" class="btn-secondary-ticket">Cetak Tiket</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 Nonton Kuy XXI. Semua Hak Dilindungi.</p>
+    </div>
+
+    <script>
+        // --- DATABASE FILM (Pastikan URL poster mini sesuai dengan file Anda, atau ganti ke path lokal jika diunduh) ---
+        const MOVIE_DATA = {
+            'inside_out_2': {
+                title: 'Inside Out 2', genre: 'Animasi, Komedi, Petualangan', duration: '1 jam 36 menit', imdb: '8.0',
+                poster_mini: 'images/Inside_Out_2_Poster_Indonesian.webp'
+            },
+            'deadpool_wolverine': {
+                title: 'Deadpool & Wolverine', genre: 'Aksi, Komedi, Fiksi Ilmiah', duration: 'Perkiraan', imdb: '8.5',
+                poster_mini: 'images/Deadpool_Wolverine_p.jpg'
+            },
+            'a_quiet_place_day_one': {
+                title: 'A Quiet Place: Day One', genre: 'Horor, Thriller, Fiksi Ilmiah', duration: 'Perkiraan', imdb: '7.8',
+                poster_mini: 'images/A_Quiet_Place.webp'
+            },
+            'despicable_me_4': {
+                title: 'Despicable Me 4', genre: 'Animasi, Komedi, Keluarga', duration: 'Perkiraan', imdb: '7.5',
+                poster_mini: 'images/Despicable_Me_4.webp'
+            },
+            'furiosa_mad_max_saga': {
+                title: 'Furiosa: A Mad Max Saga', genre: 'Aksi, Fiksi Ilmiah, Petualangan', duration: '2 jam 28 menit', imdb: '7.9',
+                poster_mini: 'images/Furiosa.jpg'
+            },
+            'kingdom_of_the_planet_of_the_apes': {
+                title: 'Kingdom of the Planet of the Apes', genre: 'Fiksi Ilmiah, Aksi, Petualangan', duration: '2 jam 25 menit', imdb: '7.2',
+                poster_mini: 'images/Kingdom_of_the_Planet_of_the_Apes_Poster.jpg'
+            },
+            'if_movie': {
+                title: 'IF', genre: 'Komedi, Drama, Fantasi', duration: '1 jam 44 menit', imdb: '6.5',
+                poster_mini: 'images/IF.webp'
+            }
+        };
+
+        // Data Harga Tiket (Sama seperti di beli_tiket_X.html)
+        const TICKET_PRICES = {
+            'reguler': 40000,
+            'premiere': 75000
+        };
+
+        // --- Utility Functions ---
+        function getQueryParams() {
+            const params = {};
+            const urlParams = new URLSearchParams(window.location.search);
+            for (const [key, value] of urlParams) {
+                params[key] = value;
+            }
+            return params;
+        }
+
+        function formatTanggal(tanggalStr) {
+            if (!tanggalStr) return 'Tidak tersedia';
+            const [tahun, bulan, hari] = tanggalStr.split('-');
+            const date = new Date(tahun, bulan - 1, hari);
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('id-ID', options);
+        }
+
+        function formatJam(jamStr) {
+            if (!jamStr) return 'Tidak tersedia';
+            const jam = jamStr.substring(0, 2);
+            const menit = jamStr.substring(2, 4);
+            return `${jam}:${menit}`;
+        }
+
+        // --- Initialization on Page Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const queryParams = getQueryParams();
+
+            // Mendapatkan referensi elemen HTML yang akan diisi
+            const ticketMoviePoster = document.getElementById('ticket-movie-poster');
+            const ticketMovieTitle = document.getElementById('ticket-movie-title');
+            const ticketMovieGenre = document.getElementById('ticket-movie-genre');
+            const ticketMovieDuration = document.getElementById('ticket-movie-duration');
+            const ticketMovieImdb = document.getElementById('ticket-movie-imdb');
+
+            const ticketTanggalTayang = document.getElementById('ticket-tanggal-tayang');
+            const ticketJamTayang = document.getElementById('ticket-jam-tayang');
+            const ticketJumlahTiket = document.getElementById('ticket-jumlah-tiket');
+            const ticketSelectedSeats = document.getElementById('ticket-selected-seats');
+            const ticketTotalBayaran = document.getElementById('ticket-total-bayaran');
+            const ticketNamaPemesan = document.getElementById('ticket-nama-pemesan');
+            const ticketEmailPemesan = document.getElementById('ticket-email-pemesan');
+            const ticketPaymentMethod = document.getElementById('ticket-payment-method'); // Elemen baru untuk metode pembayaran
+            const qrCodeImage = document.getElementById('qr-code-image');
+
+            // --- Mengisi Informasi Film (Dinamis dari MOVIE_DATA) ---
+            const filmId = queryParams.film_id;
+            const movieInfo = MOVIE_DATA[filmId];
+
+            if (movieInfo) {
+                ticketMoviePoster.src = movieInfo.poster_mini;
+                ticketMoviePoster.alt = `Poster ${movieInfo.title}`;
+                ticketMovieTitle.textContent = movieInfo.title;
+                ticketMovieGenre.textContent = `Genre: ${movieInfo.genre}`;
+                ticketMovieDuration.textContent = `Durasi: ${movieInfo.duration}`;
+                ticketMovieImdb.textContent = `IMDb: ${movieInfo.imdb}`;
+            } else {
+                ticketMovieTitle.textContent = 'Film Tidak Ditemukan';
+                ticketMovieGenre.textContent = 'Genre: N/A';
+                ticketMovieDuration.textContent = 'Durasi: N/A';
+                ticketMovieImdb.textContent = 'IMDb: N/A';
+                ticketMoviePoster.src = 'https://via.placeholder.com/120x180?text=Film+Not+Found';
+                ticketMoviePoster.alt = 'Film Tidak Ditemukan';
+            }
+
+            // --- Mengisi Data Pembelian dari Formulir ---
+            ticketTanggalTayang.textContent = formatTanggal(queryParams.tanggal_tayang);
+            ticketJamTayang.textContent = formatJam(queryParams.jam_tayang);
+            
+            const jumlahTiket = parseInt(queryParams.jumlah_tiket || 0);
+            const jenisTiket = queryParams.jenis_tiket || 'reguler';
+            const jenisTiketDisplay = jenisTiket.charAt(0).toUpperCase() + jenisTiket.slice(1);
+            ticketJumlahTiket.textContent = `${jumlahTiket} Tiket ${jenisTiketDisplay}`;
+
+            if (queryParams.selected_seats) {
+                ticketSelectedSeats.textContent = queryParams.selected_seats;
+            } else {
+                ticketSelectedSeats.textContent = 'Belum ada kursi terpilih.';
+            }
+
+            // Mengisi total pembayaran (mengambil dari final_price yang dikirim dari beli_tiket_X.html)
+            if (queryParams.final_price) {
+                const finalPrice = parseFloat(queryParams.final_price);
+                ticketTotalBayaran.textContent = `Rp ${finalPrice.toLocaleString('id-ID')}`;
+            } else {
+                const pricePerTicket = TICKET_PRICES[jenisTiket] || 0;
+                const calculatedTotal = jumlahTiket * pricePerTicket;
+                ticketTotalBayaran.textContent = `Rp ${calculatedTotal.toLocaleString('id-ID')}`;
+            }
+            
+            ticketNamaPemesan.textContent = queryParams.nama_lengkap ? decodeURIComponent(queryParams.nama_lengkap) : 'Tidak Tersedia';
+            ticketEmailPemesan.textContent = queryParams.email ? decodeURIComponent(queryParams.email) : 'Tidak Tersedia';
+
+            // --- Mengisi Metode Pembayaran ---
+            if (queryParams.payment_method) { // Parameter 'name="payment_method"' dari radio button
+                const methodMap = {
+                    'bank_transfer': 'Transfer Bank',
+                    'credit_card': 'Kartu Kredit/Debit',
+                    'e_wallet': 'E-Wallet'
+                };
+                ticketPaymentMethod.textContent = methodMap[queryParams.payment_method] || queryParams.payment_method;
+            } else {
+                ticketPaymentMethod.textContent = 'Tidak diketahui';
+            }
+
+            // --- QR Code Dinamis Sederhana (sesuai data tiket) ---
+            const qrData = `Film: ${movieInfo ? movieInfo.title : 'N/A'}\n` +
+                           `Tanggal: ${ticketTanggalTayang.textContent}\n` +
+                           `Jam: ${ticketJamTayang.textContent}\n` +
+                           `Kursi: ${ticketSelectedSeats.textContent}\n` +
+                           `Pemesan: ${ticketNamaPemesan.textContent}\n` +
+                           `Total: ${ticketTotalBayaran.textContent}`;
+            
+            qrCodeImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(qrData)}`;
+            qrCodeImage.alt = `QR Code untuk ${movieInfo ? movieInfo.title : 'Tiket'}`;
+        });
+    </script>
+</body>
+</html>
